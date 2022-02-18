@@ -4,7 +4,6 @@ import com.example.offerdaysongs.model.Singer;
 import lombok.Data;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Data
 public class CreateRecordingRequest {

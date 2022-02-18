@@ -1,29 +1,44 @@
 package com.example.offerdaysongs.model;
 
-import liquibase.pro.packaged.E;
-import lombok.Data;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Recording {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String title;
-    String version;
-    ZonedDateTime releaseTime;
+    private long id;
+
+    private String title;
+
+    private String version;
+
+    private ZonedDateTime releaseTime;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id", insertable = false, updatable = false)
-    Singer singer;
+    private Singer singer;
+
+    @OneToMany(
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "recording", orphanRemoval = true
+    )
+    private List<Copyright> copyrights = new ArrayList<>();
+
+    public void addCopyright(Copyright copyright) {
+        copyrights.add(copyright);
+        copyright.setRecording(this);
+    }
+
+    public void removeCopyright(Copyright copyright) {
+        copyrights.remove(copyright);
+        copyright.setRecording(null);
+    }
 }
