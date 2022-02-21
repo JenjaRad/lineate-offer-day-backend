@@ -7,8 +7,8 @@ import java.time.ZonedDateTime;
 
 @Data
 public class CreateRecordingRequest {
-    String title;
-    String version;
-    ZonedDateTime releaseTime;
-    Singer singer;
+    private String title;
+    private String version;
+    private ZonedDateTime releaseTime;
+    private Singer singer;
 }

@@ -1,11 +1,11 @@
 package com.example.offerdaysongs.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -19,14 +19,22 @@ public class Copyright {
     @Embedded
     private CopyrightPeriod period;
 
-    private boolean isActive;
+    private Boolean isActive;
+
+    private BigDecimal price;
+
+    @Column(name = "creation_date")
+    private LocalDate creationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recording_id")
+    @JsonIgnore
     private Recording recording;
 
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
+    @JsonIgnore
     private Company company;
+
 }
 

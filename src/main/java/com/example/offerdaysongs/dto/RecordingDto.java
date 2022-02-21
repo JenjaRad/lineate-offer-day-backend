@@ -1,11 +1,9 @@
 package com.example.offerdaysongs.dto;
 
-import com.example.offerdaysongs.model.Singer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,4 +13,11 @@ public class RecordingDto {
     String version;
     ZonedDateTime releaseTime;
     SingerDto singer;
+
+    public RecordingDto(long id, String title, String version, ZonedDateTime releaseTime) {
+        this.id = id;
+        this.title = title;
+        this.version = version;
+        this.releaseTime = releaseTime;
+    }
 }

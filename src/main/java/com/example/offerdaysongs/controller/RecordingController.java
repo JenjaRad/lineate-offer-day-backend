@@ -1,12 +1,12 @@
 package com.example.offerdaysongs.controller;
 
-import com.example.offerdaysongs.dto.CompanyDto;
 import com.example.offerdaysongs.dto.RecordingDto;
-import com.example.offerdaysongs.dto.SingerDto;
-import com.example.offerdaysongs.dto.requests.CreateCompanyRequest;
 import com.example.offerdaysongs.dto.requests.CreateRecordingRequest;
+import com.example.offerdaysongs.factory.MappingFactory;
 import com.example.offerdaysongs.model.Recording;
 import com.example.offerdaysongs.service.RecordingService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +29,9 @@ public class RecordingController {
     }
 
     @GetMapping("/")
-    public List<RecordingDto> getAll(){
-        return recordingService.getAll().stream()
+    public List<RecordingDto> getAll() {
+        return recordingService.getAll()
+                .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -40,21 +42,18 @@ public class RecordingController {
         return convertToDto(recording);
     }
 
+    @GetMapping("/calculate-price/{id}")
+    public ResponseEntity<BigDecimal> calculateRecordingPrice(@PathVariable("id") long recordingId) {
+        BigDecimal totalPrice = recordingService.calculateRecordingPrice(recordingId);
+        return new ResponseEntity<>(totalPrice, HttpStatus.OK);
+    }
+
     @PostMapping("/")
     public RecordingDto create(@RequestBody CreateRecordingRequest request) {
         return convertToDto(recordingService.create(request));
     }
 
-    private RecordingDto convertToDto(Recording recording)
-    {
-        var singer = recording.getSinger();
-        return new RecordingDto(recording.getId(),
-                                recording.getTitle(),
-                                recording.getVersion(),
-                                recording.getReleaseTime(),
-                                singer != null ? new SingerDto(singer.getId(), singer.getName()) : null);
-
-
-
+    private RecordingDto convertToDto(Recording recording) {
+        return MappingFactory.convertToDto(recording);
     }
 }

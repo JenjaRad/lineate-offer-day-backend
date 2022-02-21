@@ -2,6 +2,7 @@ package com.example.offerdaysongs.controller;
 
 import com.example.offerdaysongs.dto.SingerDto;
 import com.example.offerdaysongs.dto.requests.CreateSingerRequest;
+import com.example.offerdaysongs.factory.MappingFactory;
 import com.example.offerdaysongs.model.Singer;
 import com.example.offerdaysongs.service.SingerService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +21,7 @@ public class SingerController {
     private static final String ID = "id";
     private final SingerService signerService;
 
-    public SingerController(SingerService signerService)
-    {
+    public SingerController(SingerService signerService) {
         this.signerService = signerService;
     }
 
@@ -44,10 +44,7 @@ public class SingerController {
         return convertToDto(signerService.create(request));
     }
 
-
-
-    private SingerDto convertToDto(Singer singer)
-    {
-        return new SingerDto(singer.getId(), singer.getName());
+    private SingerDto convertToDto(Singer singer) {
+        return MappingFactory.convertToDto(singer);
     }
 }

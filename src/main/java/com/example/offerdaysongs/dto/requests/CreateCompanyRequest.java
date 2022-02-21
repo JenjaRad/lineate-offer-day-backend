@@ -1,9 +1,11 @@
 package com.example.offerdaysongs.dto.requests;
 
-import com.example.offerdaysongs.model.Copyright;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 @Data
 public class CreateCompanyRequest {
     private String name;
+    private BigDecimal totalBalance;
 }

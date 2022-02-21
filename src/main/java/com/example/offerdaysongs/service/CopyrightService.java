@@ -1,6 +1,5 @@
 package com.example.offerdaysongs.service;
 
-import com.example.offerdaysongs.dto.requests.CreateCompanyRequest;
 import com.example.offerdaysongs.dto.requests.CreateCopyrightRequest;
 import com.example.offerdaysongs.model.Company;
 import com.example.offerdaysongs.model.Copyright;
@@ -38,15 +37,13 @@ public class CopyrightService {
         copyright.setPeriod(request.getPeriod());
         var company = request.getCompany();
         var recording = request.getRecording();
-        var period = request.getPeriod();
         if (company != null && recording != null) {
             Company currentCompany = getCompany(company);
             Recording currentRecording = getRecording(recording);
             copyright.setCompany(currentCompany);
             copyright.setRecording(currentRecording);
-            copyright.setPeriod(period);
         }
-        copyright.setActive(true);
+        copyright.setIsActive(true);
         return copyrightRepository.save(copyright);
     }
 
@@ -69,16 +66,13 @@ public class CopyrightService {
     }
 
     @Transactional
-    public void updateCopyrightByCompany(long id, CreateCompanyRequest request) {
-        if (request == null) {
-            throw new IllegalArgumentException("Company cannot be null");
+    public void updateCopyrightByPeriod(long id, CopyrightPeriod period) {
+        if (period == null) {
+            throw new IllegalArgumentException("Period cannot be null");
         }
-        var company = new Company();
-        company.setName(request.getName());
-        var copyright = copyrightRepository.getById(id);
-        company.setCopyright(copyright);
-        companyRepository.save(company);
-        copyrightRepository.updateCopyrightByIdAndCompany(id, company);
+        Copyright copyright = copyrightRepository.getById(id);
+        copyright.setPeriod(period);
+        copyrightRepository.save(copyright);
     }
 
     public List<Copyright> findAllByCompanyId(long id) {
@@ -86,8 +80,8 @@ public class CopyrightService {
         return Objects.requireNonNullElse(copyrightsBySpecificCompany, Collections.emptyList());
     }
 
-    public Copyright findCopyrightByPeriod(CopyrightPeriod period) {
-        Copyright rightByPeriod = copyrightRepository.findByPeriod(period);
+    public List<Copyright> findCopyrightsByPeriod(CopyrightPeriod period) {
+        List<Copyright> rightByPeriod = copyrightRepository.findByPeriod(period);
         if (rightByPeriod == null) {
             throw new IllegalArgumentException(String.format("Cannot find copyright by this specific period: %s", period));
         }

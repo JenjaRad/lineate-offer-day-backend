@@ -7,3 +7,19 @@ databaseChangeLog:
         encoding: UTF-8
         path: migrations/001-create-schema.sql
         relativeToChangelogFile: true
+  - changeSet:
+      id: 2
+      author: eugene
+      comment: add price to specific copyright
+      sqlFile:
+        encoding: UTF-8
+        path: migrations/002-add-price-to-copyright.sql
+        relativeToChangelogFile: true
+  - changeSet:
+      id: 3
+      author: eugene
+      comment: fill additional columns with data
+      sqlFile:
+        encoding: UTF-8
+        path: migrations/003-fill-tables-with-data.sql
+        relativeToChangelogFile: true
